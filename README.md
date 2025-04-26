@@ -15,8 +15,7 @@ Create a .env file in the root directory and add your API keys:
 
 ## Run the Application
 
-Simply start the project by running: "python script.py"
------------------End---------------------------------
+- Simply start the project by running: "python script.py"
 
 🛠 Built With
 
@@ -27,6 +26,8 @@ Simply start the project by running: "python script.py"
 - LangChain
 
 - Pinecone
+
+- HuggingFace Embedding Model
 
 - Bootstrap 5
 
