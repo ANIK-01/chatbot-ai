@@ -1,0 +1,19 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+.env
+.venv
+# Python cache files
+__pycache__/
+*.py[cod]
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+# VS Code settings
+.vscode/
+# Pytest cache
+.cache
+# Coverage reports
+.coverage
+.coverage.*

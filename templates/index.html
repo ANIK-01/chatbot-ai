@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Ai</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #f8d7da;
+            align-self: flex-start;
+            text-align: left;
+        }
+        .input-group {
+            gap: 10px;
+        }
+        img.rounded-circle {
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <h2 class="text-center">Chatbot.Ai</h2>
+        <p class="text-center text-muted mb-4" style="font-size: 0.9rem;">How may I assist you today?</p>
+
+        <div class="messages" id="chatbox">
+            <!-- Messages will appear here -->
+        </div>
+
+        <div class="input-group">
+            <input type="text" class="form-control" id="userInput" placeholder="Type your message...">
+            <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById('userInput').value;
+            if (!userInput.trim()) return; // don't send empty messages
+
+            var chatbox = document.getElementById('chatbox');
+
+            // Add user message with profile
+            var userMessage = document.createElement('div');
+            userMessage.className = 'd-flex justify-content-end mb-2';
+            userMessage.innerHTML = `
+                <div class="message user-message">
+                    ${userInput}
+                </div>
+                <img src="/static/user.png" alt="User" class="rounded-circle ms-2" style="width: 40px; height: 40px;">
+            `;
+            chatbox.appendChild(userMessage);
+            chatbox.scrollTop = chatbox.scrollHeight; // auto scroll to bottom
+
+            // Clear input field
+            document.getElementById('userInput').value = '';
+
+            // Send to backend
+            fetch('/get', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'msg=' + encodeURIComponent(userInput)
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Add bot message with profile
+                var botMessage = document.createElement('div');
+                botMessage.className = 'd-flex justify-content-start mb-2';
+                botMessage.innerHTML = `
+                    <img src="/static/chatbot.png" alt="Bot" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                    <div class="message bot-message">
+                        ${data}
+                    </div>
+                `;
+                chatbox.appendChild(botMessage);
+                chatbox.scrollTop = chatbox.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Allow pressing Enter key to send message
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+
+</body>
+</html>
+<!-- End of index.html -->
